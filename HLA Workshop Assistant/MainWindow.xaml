@@ -1,0 +1,124 @@
+﻿<Window x:Class="HLA_Workshop_Assistant.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HLA_Workshop_Assistant"
+        mc:Ignorable="d" Name="uc" 
+        Title="HLA Workshop Assistant" Height="800" Width="1280" Icon="alyx.ico" >
+    <Window.Resources>
+        <local:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <local:DateVisibilityConverter x:Key="DateVisibilityConverter" />
+        <local:ZeroInvisibleConverter x:Key="ZeroInvisibleConverter" />
+        <local:OppositeBooleanToVisibilityConverter x:Key="OppositeBooleanToVisibilityConverter"/>
+    </Window.Resources>
+    <Window.Background>
+        
+        <ImageBrush
+            AlignmentX="Center" AlignmentY="Top" Stretch="None" ImageSource="Resources/half-life-alyx-concept.jpg"/>
+    </Window.Background>
+    <DockPanel>
+        <DockPanel  DockPanel.Dock="Top">
+            <!--<DockPanel.Background>
+                <ImageBrush ImageSource="Resources/half-life-alyx-concept.jpg" Stretch="None"/>
+            </DockPanel.Background>-->
+            <TextBlock
+                HorizontalAlignment="Right" 
+                Foreground="white" Padding="5,0,0,0" VerticalAlignment="Center" DockPanel.Dock="Top" Text="By Russ Judge.  Distributed into the Public Domain." />
+            <Grid DockPanel.Dock="Top">
+                <StackPanel Orientation="Horizontal"  >
+
+
+                    <Button Margin="5,5,5,5" ToolTip="Settings" Click="OnSettings" VerticalAlignment="Center" >
+                        <Image Height="32" Source="/Resources/gear.png" />
+                    </Button>
+
+                    <Button Margin="5,5,5,5" VerticalAlignment="Center" ToolTip="Refresh" Click="OnRefresh">
+                        <Image Height="32" Source="/Resources/iSync.png" />
+                    </Button>
+                    <Button Margin="5,5,5,5" VerticalAlignment="Center"  ToolTip="About" Click="OnAbout">
+                        <Image Height="32" Source="/Resources/info.png" />
+                    </Button>
+                    <TextBlock Width="50" Text="" />
+                    <Button
+                        Padding="5,5,5,5"
+                        ToolTip="Loads all workshops from the Half-Life: Alyx Workshop page on Steam."
+                        VerticalAlignment="Center"
+                        Visibility="{Binding LoadAllWorkshops, ElementName=uc, Converter={StaticResource OppositeBooleanToVisibilityConverter}}"
+                        Click="OnLoadAllWorkshops">
+                        <StackPanel Orientation="Horizontal" >
+                            <Image Width="32" Height="32" Source="/Resources/load.png" />
+                            <TextBlock Padding="5,0,5,0" VerticalAlignment="Center" Text="Load all Workshops" />
+
+                        </StackPanel>
+
+                    </Button>
+                </StackPanel>
+                <TextBlock Foreground="white"
+            Padding="15,15,15,15"
+            DockPanel.Dock="Top" FontWeight="Bold" FontSize="22" Text="AddOns for Half-Life: Alyx"
+            HorizontalAlignment="Center" />
+
+            </Grid>
+
+        </DockPanel>
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <StackPanel   Orientation="Horizontal" >
+                    <TextBlock FontSize="12" Text="{Binding InstalledWorkshopItems.Count, ElementName=uc}" />
+                    <TextBlock FontSize="12" Padding="5,0,5,0" Text="Installed AddOns" />
+                </StackPanel>
+            </StatusBarItem>
+            <Separator />
+            <StatusBarItem Visibility="{Binding LoadAllWorkshops, ElementName=uc, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Button
+                     FontSize="12"
+                    Click="OnGotoSteamWorkshopList" ToolTip="Open browser to the HL:A Workshop page">
+                    <StackPanel Orientation="Horizontal" >
+                        <Image Height="16" Source="/Resources/steam.png" />
+
+                        <TextBlock Padding="5,0,0,0" Text="{Binding AllWorkshopItems.Count, ElementName=uc}" />
+                        <TextBlock Padding="5,0,5,0" Text="Total AddOns Available" />
+                    </StackPanel>
+                </Button>
+            </StatusBarItem>
+            <Separator />
+            <StatusBarItem>
+                <TextBlock
+                     FontSize="12"
+                    Visibility="{Binding TotalLoading, ElementName=uc, Converter={StaticResource ZeroInvisibleConverter}}"
+                    Text="Loading" FontWeight="Bold" Foreground="Green" />
+            </StatusBarItem>
+        </StatusBar>
+        <TabControl DockPanel.Dock="Top">
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock FontSize="18" FontWeight="Bold" Text="Installed AddOns" />
+                </TabItem.Header>
+                <local:SteamWorkshopItemControl
+                    GCFScapeConfigured="{Binding GCFScapeConfigured, ElementName=uc}"
+                    VRFConfigured="{Binding VRFConfigured, ElementName=uc}"
+                    ActiveWorkshopItems="{Binding InstalledWorkshopItems, ElementName=uc}" />
+            </TabItem>
+            <TabItem IsEnabled="{Binding LoadAllWorkshops, ElementName=uc}">
+                <TabItem.Header>
+                    <TextBlock FontSize="18" FontWeight="Bold" Text="Not Installed AddOns" />
+                </TabItem.Header>
+                <local:SteamWorkshopItemControl
+                    GCFScapeConfigured="{Binding GCFScapeConfigured, ElementName=uc}"
+                    VRFConfigured="{Binding VRFConfigured, ElementName=uc}"
+                    ActiveWorkshopItems="{Binding NotInstalledWorkshopItems, ElementName=uc}" />
+            </TabItem>
+            <TabItem IsEnabled="{Binding LoadAllWorkshops, ElementName=uc}">
+                <TabItem.Header>
+                    <TextBlock FontSize="18" FontWeight="Bold" Text="All AddOns" />
+                </TabItem.Header>
+                <local:SteamWorkshopItemControl
+                    GCFScapeConfigured="{Binding GCFScapeConfigured, ElementName=uc}"
+                    VRFConfigured="{Binding VRFConfigured, ElementName=uc}"
+                    ActiveWorkshopItems="{Binding AllWorkshopItems, ElementName=uc}" />
+            </TabItem>
+        </TabControl>
+
+    </DockPanel>
+</Window>

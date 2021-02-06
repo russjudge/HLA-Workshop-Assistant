@@ -1,0 +1,69 @@
+﻿<Window x:Class="HLA_Workshop_Assistant.Wpf.About"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HLA_Workshop_Assistant.Wpf"
+        mc:Ignorable="d" Name="uc" MinWidth="600"
+        Title="About HLA Workshop Assistant"
+        SizeToContent="WidthAndHeight"
+        WindowStyle="None" ResizeMode="NoResize"
+        ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" Topmost="True" BorderThickness="4" >
+    <Window.BorderBrush>
+        <LinearGradientBrush EndPoint="0,0.25" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+            <GradientStop Color="#FFFD5454" Offset="0"/>
+            <GradientStop Color="#FFFDCF54" Offset="0.5"/>
+            <GradientStop Color="#FFF6FD67" Offset="1"/>
+        </LinearGradientBrush>
+    </Window.BorderBrush>
+    <Window.Background>
+
+        <ImageBrush
+            AlignmentX="Center" AlignmentY="Top" Stretch="None"
+            ImageSource="/HLA Workshop Assistant;component/Resources/half-life-alyx-concept.jpg"/>
+    </Window.Background>
+    <DockPanel>
+        <TextBlock
+            Margin="0,20,0,0"
+            FontWeight="Bold" 
+            FontSize="32" Foreground="WhiteSmoke" 
+            DockPanel.Dock="Top" HorizontalAlignment="Center" 
+            Text="HLA Workshop Assistant" />
+        <StackPanel
+            Orientation="Horizontal" 
+            HorizontalAlignment="Center" 
+            DockPanel.Dock="Top" >
+            <TextBlock
+                FontSize="14"
+                Text="Version: " Foreground="Wheat"/>
+            <TextBlock
+                FontSize="14"
+                Foreground="Wheat"
+                Text="{Binding AppVersion, ElementName=uc}" />
+        </StackPanel>
+        <TextBlock
+            Margin="0,20,0,0"
+            Text="By Russ Judge"
+            DockPanel.Dock="Top" HorizontalAlignment="Center" FontWeight="Bold"
+            FontSize="18"
+            Foreground="Brown" />
+        <TextBlock
+            Padding="0,0,0,10"
+            DockPanel.Dock="Top" 
+            Text="Confederate in Blue"
+            Foreground="Blue"
+            FontSize="14"
+            HorizontalAlignment="Center"
+            />
+        <Button
+            Margin="0,-30,5,5"
+            DockPanel.Dock="Top" 
+            HorizontalAlignment="Right" 
+            IsDefault="True" IsCancel="True"
+            Click="OnOK" >
+            <TextBlock Text="OK" FontWeight="Bold" Padding="5,5,5,5" />
+        </Button>
+    </DockPanel>
+
+
+</Window>

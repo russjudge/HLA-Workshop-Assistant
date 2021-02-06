@@ -1,0 +1,178 @@
+﻿<UserControl x:Class="HLA_Workshop_Assistant.SteamWorkshopItemControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:HLA_Workshop_Assistant"
+             mc:Ignorable="d" Name="uc"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <local:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <local:DateVisibilityConverter x:Key="DateVisibilityConverter" />
+        <local:ZeroInvisibleConverter x:Key="ZeroInvisibleConverter" />
+        
+    </UserControl.Resources>
+    <ListView
+        AlternationCount="2"
+        DockPanel.Dock="Top" ItemsSource="{Binding ActiveWorkshopItems, Mode=OneWay, ElementName=uc}">
+
+        <ListView.View>
+            <GridView>
+
+                <GridViewColumn Width="90">
+                    <GridViewColumnHeader local:GridViewColumnHeaderSorter.SortColumnID="Key" ToolTip="Click to sort on ID" />
+                    <GridViewColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                    <Button
+                                        Visibility="{Binding IsInstalled, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                        ToolTip="Open Folder" Click="OnOpenFolder" CommandParameter="{Binding}" >
+
+                                        <Image Height="32" Source="/Resources/OpenFile.png" />
+
+                                    </Button>
+                                    <Button ToolTip="Open Workshop webpage" Click="OnOpenWorkshopWebpage" CommandParameter="{Binding}">
+                                        <Image Height="32" Source="/Resources/steam.png" />
+
+                                    </Button>
+                                </StackPanel>
+                                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                    <AdornerDecorator Visibility="{Binding IsInstalled, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                        <Button Visibility="{Binding GCFScapeConfigured, ElementName=uc, Converter={StaticResource BooleanToVisibilityConverter}}" ToolTip="Open in GCFScape" Click="OnOpenInGCFScape" CommandParameter="{Binding}">
+
+                                            <Image Width="32" Source="/Resources/GCFScape_101.ico" />
+
+                                        </Button>
+                                    </AdornerDecorator>
+                                    <AdornerDecorator Visibility="{Binding IsInstalled, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                        <Button Visibility="{Binding VRFConfigured, ElementName=uc, Converter={StaticResource BooleanToVisibilityConverter}}" ToolTip="Open in VRF" Click="OnOpenInVRF" CommandParameter="{Binding}">
+
+                                            <Image Width="32" Source="/Resources/vrf.ico" />
+
+                                        </Button>
+                                    </AdornerDecorator>
+                                   
+                                </StackPanel>
+                            </StackPanel>
+                        </DataTemplate>
+                    </GridViewColumn.CellTemplate>
+                </GridViewColumn>
+
+                <GridViewColumn Width="260">
+                    <GridViewColumnHeader local:GridViewColumnHeaderSorter.SortColumnID="Author" ToolTip="Click to sort by Author." />
+                    <GridViewColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="Title/ID/Author" FontWeight="Black"  />
+                        </DataTemplate>
+                    </GridViewColumn.HeaderTemplate>
+
+                    <GridViewColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <StackPanel.ToolTip>
+                                    <StackPanel>
+                                        <Image MaxHeight="300" MaxWidth="300" Source="{Binding Image.ImageSource}" />
+                                        <TextBlock Text="Personal Notes:" FontWeight="Bold" FontStyle="Italic" />
+                                        <Label Content="{Binding Note, Mode=OneWay}" />
+                                    </StackPanel>
+                                </StackPanel.ToolTip>
+                                <TextBlock Padding="5,0,5,0" FontSize="14" FontWeight="Bold" Text="{Binding Title, Mode=OneWay}" />
+                                <TextBlock Padding="5,0,5,0" Text="{Binding Key, Mode=OneWay}" />
+                                <TextBlock Padding="5,0,5,0" FontWeight="Medium" FontStyle="Italic" Text="{Binding Author, Mode=OneWay}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </GridViewColumn.CellTemplate>
+                </GridViewColumn>
+
+                <GridViewColumn Width="600">
+                    <GridViewColumnHeader local:GridViewColumnHeaderSorter.SortColumnID="Title" ToolTip="Click to sort on title."/>
+                    <GridViewColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="Description" FontWeight="Black" />
+                        </DataTemplate>
+                    </GridViewColumn.HeaderTemplate>
+
+                    <GridViewColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <RichTextBox BorderThickness="0"
+                                    Padding="5,0,5,0" MaxHeight="64" VerticalScrollBarVisibility="Auto" 
+                                    IsReadOnly="True" IsDocumentEnabled="True"
+                                    local:HtmlRichTextBoxBehavior.Text="{Binding Description}" Background="Transparent" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </GridViewColumn.CellTemplate>
+                </GridViewColumn>
+                <GridViewColumn Width="180">
+                    <GridViewColumnHeader local:GridViewColumnHeaderSorter.SortColumnID="PublishTime" ToolTip="Click to sort on Last Update" />
+                    <GridViewColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="Last Update" FontWeight="Black" />
+                        </DataTemplate>
+                    </GridViewColumn.HeaderTemplate>
+                    <GridViewColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Click="OnEnterNote" ToolTip="Notes" CommandParameter="{Binding}">
+                                    <Image Height="32" Source="/Resources/postit.png" />
+                                </Button>
+                                <StackPanel>
+                                    <StackPanel.ToolTip>
+                                        <StackPanel>
+                                            <Image MaxHeight="300" MaxWidth="300" Source="{Binding Image.ImageSource}" />
+                                            <TextBlock Text="Personal Notes:" FontWeight="Bold" FontStyle="Italic" />
+                                            <Label Content="{Binding Note, Mode=OneWay}" /> 
+                                        </StackPanel>
+                                    </StackPanel.ToolTip>
+                                    <TextBlock
+                                        Visibility="{Binding PublishTime, Converter={StaticResource DateVisibilityConverter}}"
+                                        Padding="5,0,5,0" VerticalAlignment="Center" Text="{Binding PublishTime, Mode=OneWay}" />
+                                    <TextBlock
+                                        Padding="5,0,5,0" FontStyle="Italic" 
+                                        Visibility="{Binding CreatedTime, Converter={StaticResource DateVisibilityConverter}}"
+                                        Text="Posted: " />
+                                    <TextBlock
+                                    Visibility="{Binding CreatedTime, Converter={StaticResource DateVisibilityConverter}}"
+                                    Padding="5,0,5,0" VerticalAlignment="Center" Text="{Binding CreatedTime, Mode=OneWay}" />
+
+                                </StackPanel>
+                            </StackPanel>
+                        </DataTemplate>
+                    </GridViewColumn.CellTemplate>
+                </GridViewColumn>
+                <!--<GridViewColumn Width="160">
+                    <GridViewColumnHeader local:GridViewColumnHeaderSorter.SortColumnID="Posted" ToolTip="Click to sort on Posted time"/>
+                    <GridViewColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="Posted" FontWeight="Black" />
+                        </DataTemplate>
+                    </GridViewColumn.HeaderTemplate>
+                    <GridViewColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                                    Visibility="{Binding CreatedTime, Converter={StaticResource DateVisibilityConverter}}"
+                                    Padding="5,0,5,0" VerticalAlignment="Center" Text="{Binding CreatedTime, Mode=OneWay}" />
+                        </DataTemplate>
+                    </GridViewColumn.CellTemplate>
+                </GridViewColumn>-->
+                <GridViewColumn Width="90">
+                    <GridViewColumnHeader local:GridViewColumnHeaderSorter.SortColumnID="Size" ToolTip="Click to sort on package size." />
+                    <GridViewColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="Size" FontWeight="Black" />
+                        </DataTemplate>
+                    </GridViewColumn.HeaderTemplate>
+                    <GridViewColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                                    Padding="5,0,5,0" VerticalAlignment="Center" Text="{Binding Size, Mode=OneWay}" />
+                        </DataTemplate>
+                    </GridViewColumn.CellTemplate>
+                </GridViewColumn>
+
+            </GridView>
+
+        </ListView.View>
+    </ListView>
+</UserControl>

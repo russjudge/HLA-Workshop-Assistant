@@ -1,0 +1,7 @@
+.vs
+/packages
+MSTest.TestFramework.2.1.1
+MSTest.TestAdapter.2.1.1
+TestResults
+bin
+obj
