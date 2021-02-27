@@ -142,11 +142,20 @@ namespace HLA_Workshop_Assistant
         static Dictionary<string, SteamWorkshopItem> loadedItemDict = new Dictionary<string, SteamWorkshopItem>();
         public static void GetAllSteamWorkshopItems(IEnumerable<SteamWorkshopItem> loadedItems)
         {
+
+          
             //Go to page2: https://steamcommunity.com/workshop/browse/?appid=546560&browsesort=trend&section=readytouseitems&days=90&actualsort=trend&p=2
             
             foreach (var item in loadedItems)
             {
-                loadedItemDict.Add(item.Key, item);
+                if (loadedItemDict.ContainsKey(item.Key))
+                {
+                    loadedItemDict[item.Key] = item;
+                }
+                else
+                {
+                    loadedItemDict.Add(item.Key, item);
+                }
             }
             List<SteamWorkshopItem> retVal = new List<SteamWorkshopItem>();
             try

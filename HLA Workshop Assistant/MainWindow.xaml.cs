@@ -25,6 +25,7 @@ namespace HLA_Workshop_Assistant
         //TODO: Add self-updator
         public MainWindow()
         {
+            Utility.NewWorkshopItemRetrieved += Utility_NewWorkshopItemRetrieved;
             System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
             System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
             string version = fvi.FileVersion;
@@ -198,7 +199,9 @@ namespace HLA_Workshop_Assistant
         void LoadData(object state)
         {
             var loadedItems = state as List<SteamWorkshopItem>;
-            Utility.NewWorkshopItemRetrieved += Utility_NewWorkshopItemRetrieved;
+           
+            
+            
             //Utility.LoadCompleted += Utility_LoadCompleted;
             Utility.GetAllSteamWorkshopItems(loadedItems);
         }
