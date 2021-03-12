@@ -60,12 +60,12 @@ namespace HLA_Workshop_Assistant
             IsInitializing = false;
             BeginPoolInvoke(LoadWorkshopPage);
         }
-
-
+        public string PageURL { get; private set; }
+        public string ImageURL { get; private set; }
         string pageData = null;
         void LoadWorkshopPage(object state)
         {
-
+            PageURL = Utility.GetWorkshopWebpageURL(this.Key);
             pageData = Utility.GetWorkshopWebpage(this.Key);
             if (!string.IsNullOrEmpty(pageData))
             {
@@ -95,14 +95,14 @@ namespace HLA_Workshop_Assistant
 
                     }
                 }
-
-                var imgURL = Utility.ExtractImageURL(pageData);
-                if (string.IsNullOrEmpty(imgURL))
+                AuthorProfileURL = Utility.ExtractAuthorProfileURL(pageData);
+                ImageURL = Utility.ExtractImageURL(pageData);
+                if (string.IsNullOrEmpty(ImageURL))
                 {
                 }
                 else
                 {
-                    Image = CreateInstance<BitmapImageUIThreadManaged>(imgURL);
+                    Image = CreateInstance<BitmapImageUIThreadManaged>(ImageURL);
                 }
             }
             IsLoading = false;
@@ -110,7 +110,8 @@ namespace HLA_Workshop_Assistant
         }
         public bool IsLoading { get; private set; }
 
-
+        public string AuthorProfileURL { get; set; }
+        
 
         public static readonly DependencyProperty IsInstalledProperty =
            DependencyProperty.Register(nameof(IsInstalled), typeof(bool),

@@ -88,6 +88,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Wpf\PromptDialog.xaml.cs">
+      <DependentUpon>PromptDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Wpf\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
@@ -119,6 +122,10 @@
     <Page Include="Wpf\NoteWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Wpf\PromptDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Wpf\SettingsWindow.xaml">
       <SubType>Designer</SubType>
@@ -200,6 +207,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\steam.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\export.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\mail_find.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\magnify.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

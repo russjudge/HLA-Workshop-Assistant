@@ -3,9 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:HLA_Workshop_Assistant"
+        xmlns:local="clr-namespace:HLA_Workshop_Assistant" KeyDown="OnKeyDown"
         mc:Ignorable="d" Name="uc" 
-        Title="HLA Workshop Assistant" Height="800" Width="1280" Icon="alyx.ico" >
+        Title="HLA Workshop Assistant" Height="800" Width="1440" Icon="alyx.ico" >
     <Window.Resources>
         <local:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <local:DateVisibilityConverter x:Key="DateVisibilityConverter" />
@@ -58,7 +58,10 @@
             Padding="15,15,15,15"
             DockPanel.Dock="Top" FontWeight="Bold" FontSize="22" Text="AddOns for Half-Life: Alyx"
             HorizontalAlignment="Center" />
-
+                <TextBlock 
+                    Foreground="white"
+                    FontSize="14" HorizontalAlignment="Right" VerticalAlignment="Bottom" 
+                    Text="Ctrl-F: Find   F3: Repeat Find" />
             </Grid>
 
         </DockPanel>
@@ -90,30 +93,30 @@
                     Text="Loading" FontWeight="Bold" Foreground="Green" />
             </StatusBarItem>
         </StatusBar>
-        <TabControl DockPanel.Dock="Top">
-            <TabItem>
+        <TabControl DockPanel.Dock="Top" SelectedItem="{Binding Path=SelectedTabItem, Mode=TwoWay, ElementName=uc}">
+            <TabItem Tag="{Binding ElementName=Item1}">
                 <TabItem.Header>
                     <TextBlock FontSize="18" FontWeight="Bold" Text="Installed AddOns" />
                 </TabItem.Header>
-                <local:SteamWorkshopItemControl
+                <local:SteamWorkshopItemControl x:Name="Item1"
                     GCFScapeConfigured="{Binding GCFScapeConfigured, ElementName=uc}"
                     VRFConfigured="{Binding VRFConfigured, ElementName=uc}"
                     ActiveWorkshopItems="{Binding InstalledWorkshopItems, ElementName=uc}" />
             </TabItem>
-            <TabItem IsEnabled="{Binding LoadAllWorkshops, ElementName=uc}">
+            <TabItem IsEnabled="{Binding LoadAllWorkshops, ElementName=uc}"  Tag="{Binding ElementName=Item2}">
                 <TabItem.Header>
                     <TextBlock FontSize="18" FontWeight="Bold" Text="Not Installed AddOns" />
                 </TabItem.Header>
-                <local:SteamWorkshopItemControl
+                <local:SteamWorkshopItemControl x:Name="Item2"
                     GCFScapeConfigured="{Binding GCFScapeConfigured, ElementName=uc}"
                     VRFConfigured="{Binding VRFConfigured, ElementName=uc}"
                     ActiveWorkshopItems="{Binding NotInstalledWorkshopItems, ElementName=uc}" />
             </TabItem>
-            <TabItem IsEnabled="{Binding LoadAllWorkshops, ElementName=uc}">
+            <TabItem IsEnabled="{Binding LoadAllWorkshops, ElementName=uc}"  Tag="{Binding ElementName=Item3}">
                 <TabItem.Header>
                     <TextBlock FontSize="18" FontWeight="Bold" Text="All AddOns" />
                 </TabItem.Header>
-                <local:SteamWorkshopItemControl
+                <local:SteamWorkshopItemControl x:Name="Item3"
                     GCFScapeConfigured="{Binding GCFScapeConfigured, ElementName=uc}"
                     VRFConfigured="{Binding VRFConfigured, ElementName=uc}"
                     ActiveWorkshopItems="{Binding AllWorkshopItems, ElementName=uc}" />

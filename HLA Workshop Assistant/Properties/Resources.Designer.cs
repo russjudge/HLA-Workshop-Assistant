@@ -81,6 +81,16 @@ namespace HLA_Workshop_Assistant.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap export {
+            get {
+                object obj = ResourceManager.GetObject("export", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon GCFScape_101 {
@@ -166,6 +176,26 @@ namespace HLA_Workshop_Assistant.Properties {
         internal static System.Drawing.Bitmap load {
             get {
                 object obj = ResourceManager.GetObject("load", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap magnify {
+            get {
+                object obj = ResourceManager.GetObject("magnify", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap mail_find {
+            get {
+                object obj = ResourceManager.GetObject("mail_find", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

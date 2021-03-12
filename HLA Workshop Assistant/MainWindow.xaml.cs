@@ -161,6 +161,27 @@ namespace HLA_Workshop_Assistant
             }
         }
 
+
+
+        public static readonly DependencyProperty SelectedTabItemProperty =
+            DependencyProperty.Register(nameof(SelectedTabItem), typeof(TabItem),
+            typeof(MainWindow));
+        public TabItem SelectedTabItem
+        {
+            get
+            {
+                return (TabItem)GetValue(SelectedTabItemProperty);
+            }
+            set
+            {
+                this.SetValue(SelectedTabItemProperty, value);
+            }
+        }
+
+
+
+
+
         private void OnAbout(object sender, RoutedEventArgs e)
         {
             About win = new About();
@@ -293,6 +314,24 @@ namespace HLA_Workshop_Assistant
         {
             LoadAllWorkshops = true;
             StartLoadData();
+        }
+
+        private void OnKeyDown(object sender, KeyEventArgs e)
+        {
+            SteamWorkshopItemControl ctl = SelectedTabItem.Tag as SteamWorkshopItemControl;
+            if (ctl != null)
+            {
+                if (e.Key == Key.F && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+                {
+                    ctl.Find();
+                    e.Handled = true;
+                }
+                if (e.Key == Key.F3)
+                {
+                    ctl.RepeatFind();
+                    e.Handled = true;
+                }
+            }
         }
     }
 }

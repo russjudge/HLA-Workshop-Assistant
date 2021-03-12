@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Windows.Media.Imaging;
 using System.Web.Script.Serialization;
+using System.Windows;
 
 namespace HLA_Workshop_Assistant
 {
@@ -27,7 +28,10 @@ namespace HLA_Workshop_Assistant
         const string HLAWorkshopPath = @"steamapps\workshop\content";
         const string HLAKey = "546560";
         const string WorkshopInfoFile = "publish_data.txt";
-
+        //https://steamcommunity.com/profiles/76561198260717307/myworkshopfiles/?appid=546560 
+        //https://steamcommunity.com/profiles/cj_beans/myworkshopfiles/?appid=546560
+        //const string authorURLFormat = "https://steamcommunity.com/profiles/{0}/myworkshopfiles/?appid=" + HLAKey;
+        const string authorURLFormat = "https://steamcommunity.com/id/{0}";
 
         /*
         const string GCFScapeRegistryKey = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\GCFScape_is1";
@@ -574,6 +578,74 @@ namespace HLA_Workshop_Assistant
             }
             return retVal;
         }
+        //17
+     
+        public static string ExtractAuthorProfileURL(string page)
+        {
+
+            //Need to identify type--they are not compatible with each other.
+            /*
+            
+               //https://steamcommunity.com/profiles/76561198260717307/myworkshopfiles/?appid=546560 
+        //https://steamcommunity.com/profiles/cj_beans/myworkshopfiles/?appid=546560
+            */
+            const string matchkey = "https://steamcommunity.com/profiles/";
+            const string matchkey2 = "https://steamcommunity.com/id/";
+            string retVal;
+            LastErrorMessage = "";
+         
+            try
+            {
+                int i = page.IndexOf(matchkey);
+                int m = i + matchkey.Length;
+                if (i > -1)
+                {
+                    
+                    int k = page.IndexOf("/", m);
+                    if (k - m > 17)
+                    {
+                        i = page.IndexOf(matchkey2);
+                        if (i > -1)
+                        {
+                            k = page.IndexOf("\"", i);
+                            retVal = page.Substring(i, k - i);
+                        }
+                        else
+                        {
+                            retVal = null;
+                        }
+                    }
+                    else if (k > i)
+                    {
+                        retVal = page.Substring(i, k - i);
+                    }
+                    else
+                    {
+                       
+                        retVal = null;
+                    }
+                }
+                else
+                {
+                    i = page.IndexOf(matchkey2);
+                    if (i > -1)
+                    {
+                        int k = page.IndexOf("\"", i);
+                        retVal = page.Substring(i, k - i);
+                    }
+                    else
+                    {
+                        retVal = null;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LastErrorMessage = ex.Message;
+                retVal = null;
+            }
+            return retVal;
+        }
         public static string ExtractAuthor(string page)
         {
             LastErrorMessage = "";
@@ -632,7 +704,34 @@ namespace HLA_Workshop_Assistant
 
             return HLAWorkshopFolder;
         }
-
+        public static void Export(string filename, IEnumerable<SteamWorkshopItem> items)
+        {
+            string itemFormat = "\"{0}\",";
+            try
+            {
+                using (StreamWriter sw = new StreamWriter(filename))
+                {
+                    sw.WriteLine("\"Name\",\"Link\",\"Author\",\"Author Link\",\"Release Date\",\"Last Update\",\"Main Image Link\"");
+                    foreach (var item in items)
+                    {
+                        StringBuilder sb = new StringBuilder();
+                        sb.AppendFormat(itemFormat, item.Title);
+                        sb.AppendFormat(itemFormat, item.PageURL);
+                        sb.AppendFormat(itemFormat, item.Author);
+                        sb.AppendFormat(itemFormat, item.AuthorProfileURL);
+                        sb.AppendFormat(itemFormat, item.CreatedTime.ToString("yyyy-MM-dd HH:mm:ss"));
+                        sb.AppendFormat(itemFormat, item.PublishTime.ToString("yyyy-MM-dd HH:mm:ss"));
+                        sb.AppendFormat("\"{0}\"", item.ImageURL);
+                        sw.WriteLine(sb.ToString());
+                    }
+                }
+                MessageBox.Show("Export complete", "Export", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Unable to save due to error: \r\n" + ex.Message, "Export", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
         public static SteamWorkshopItem[] GetHLAWorkshopList()
         {
             List<SteamWorkshopItem> retVal = new List<SteamWorkshopItem>();

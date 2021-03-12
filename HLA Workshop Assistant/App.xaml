@@ -5,6 +5,7 @@
              StartupUri="MainWindow.xaml" Startup="OnStart" Exit="OnExit">
     <Application.Resources>
         <Style TargetType="{x:Type Button}">
+            
             <Setter Property="Foreground" Value="#373737" />
             <Setter Property="Background" Value="White" />
             <Setter Property="FontSize" Value="15" />
@@ -13,7 +14,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
-                        <Border CornerRadius="4" Background="{TemplateBinding Background}">
+                        <Border Padding="5,5,5,5" CornerRadius="4" BorderThickness="1,1,1,1" BorderBrush="Black" Background="{TemplateBinding Background}">
                             <Grid>
                                 <!--<Path x:Name="PathIcon" Width="15" Height="25" Stretch="Fill" Fill="#4C87B3" HorizontalAlignment="Left" Margin="17,0,0,0" Data="F1 M 30.0833,22.1667L 50.6665,37.6043L 50.6665,38.7918L 30.0833,53.8333L 30.0833,22.1667 Z "/>-->
                                 <ContentPresenter x:Name="MyContentPresenter" Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" />

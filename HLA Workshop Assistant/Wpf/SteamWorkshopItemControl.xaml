@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:HLA_Workshop_Assistant"
-             mc:Ignorable="d" Name="uc"
+             mc:Ignorable="d" Name="uc" Keyboard.KeyDown="OnControlKeyDown"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <local:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
@@ -12,14 +12,33 @@
         <local:ZeroInvisibleConverter x:Key="ZeroInvisibleConverter" />
         
     </UserControl.Resources>
-    <ListView
-        AlternationCount="2"
+    <!--<UserControl.InputBindings>
+        <KeyBinding Command="ApplicationCommands."
+       Gesture="CTRL+F" />
+    </UserControl.InputBindings>-->
+    <DockPanel>
+        <StackPanel HorizontalAlignment="Right" Margin="0,0,0,0"  Orientation="Horizontal" DockPanel.Dock="Top">
+            <Button Height="32" Click="OnFind" HorizontalAlignment="Right">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/HLA Workshop Assistant;component/Resources/magnify.png" />
+                </StackPanel>
+            </Button>
+            <Button Height="32" Click="OnExport" HorizontalAlignment="Right" >
+                <StackPanel Orientation="Horizontal">
+                <Image Source="/HLA Workshop Assistant;component/Resources/export.png" />
+                    <TextBlock Text="Export List" />
+                </StackPanel>
+            </Button>
+        </StackPanel>
+        
+        <ListView Name="theListView"
+        AlternationCount="2" SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay, ElementName=uc}"
         DockPanel.Dock="Top" ItemsSource="{Binding ActiveWorkshopItems, Mode=OneWay, ElementName=uc}">
 
         <ListView.View>
             <GridView>
 
-                <GridViewColumn Width="90">
+                <GridViewColumn Width="100">
                     <GridViewColumnHeader local:GridViewColumnHeaderSorter.SortColumnID="Key" ToolTip="Click to sort on ID" />
                     <GridViewColumn.CellTemplate>
                         <DataTemplate>
@@ -79,8 +98,11 @@
                                 </StackPanel.ToolTip>
                                 <TextBlock Padding="5,0,5,0" FontSize="14" FontWeight="Bold" Text="{Binding Title, Mode=OneWay}" />
                                 <TextBlock Padding="5,0,5,0" Text="{Binding Key, Mode=OneWay}" />
-                                <TextBlock Padding="5,0,5,0" FontWeight="Medium" FontStyle="Italic" Text="{Binding Author, Mode=OneWay}" />
-                            </StackPanel>
+                                    <Button BorderThickness="0,0,0,0" FontSize="10" Padding="0,0,0,0" Margin="0,0,0,0" HorizontalContentAlignment="Left" HorizontalAlignment="Left"  
+                                        Click="OnAuthorProfile" CommandParameter="{Binding}" ToolTip="Go to Author profile on Steam">
+                                <TextBlock  Padding="5,0,5,0" FontWeight="Medium" FontStyle="Italic" Text="{Binding Author, Mode=OneWay}" />
+                                    </Button>
+                                </StackPanel>
                         </DataTemplate>
                     </GridViewColumn.CellTemplate>
                 </GridViewColumn>
@@ -117,7 +139,7 @@
                                 <Button Click="OnEnterNote" ToolTip="Notes" CommandParameter="{Binding}">
                                     <Image Height="32" Source="/Resources/postit.png" />
                                 </Button>
-                                <StackPanel>
+                                <StackPanel VerticalAlignment="Center">
                                     <StackPanel.ToolTip>
                                         <StackPanel>
                                             <Image MaxHeight="300" MaxWidth="300" Source="{Binding Image.ImageSource}" />
@@ -128,20 +150,21 @@
                                     <TextBlock
                                         Visibility="{Binding PublishTime, Converter={StaticResource DateVisibilityConverter}}"
                                         Padding="5,0,5,0" VerticalAlignment="Center" Text="{Binding PublishTime, Mode=OneWay}" />
-                                    <TextBlock
+                                    <!--<TextBlock
                                         Padding="5,0,5,0" FontStyle="Italic" 
                                         Visibility="{Binding CreatedTime, Converter={StaticResource DateVisibilityConverter}}"
                                         Text="Posted: " />
                                     <TextBlock
                                     Visibility="{Binding CreatedTime, Converter={StaticResource DateVisibilityConverter}}"
-                                    Padding="5,0,5,0" VerticalAlignment="Center" Text="{Binding CreatedTime, Mode=OneWay}" />
+                                    Padding="5,0,5,0" VerticalAlignment="Center" Text="{Binding CreatedTime, Mode=OneWay}" />-->
 
                                 </StackPanel>
                             </StackPanel>
                         </DataTemplate>
                     </GridViewColumn.CellTemplate>
+                    
                 </GridViewColumn>
-                <!--<GridViewColumn Width="160">
+                <GridViewColumn Width="160">
                     <GridViewColumnHeader local:GridViewColumnHeaderSorter.SortColumnID="Posted" ToolTip="Click to sort on Posted time"/>
                     <GridViewColumn.HeaderTemplate>
                         <DataTemplate>
@@ -155,7 +178,7 @@
                                     Padding="5,0,5,0" VerticalAlignment="Center" Text="{Binding CreatedTime, Mode=OneWay}" />
                         </DataTemplate>
                     </GridViewColumn.CellTemplate>
-                </GridViewColumn>-->
+                </GridViewColumn>
                 <GridViewColumn Width="90">
                     <GridViewColumnHeader local:GridViewColumnHeaderSorter.SortColumnID="Size" ToolTip="Click to sort on package size." />
                     <GridViewColumn.HeaderTemplate>
@@ -175,4 +198,5 @@
 
         </ListView.View>
     </ListView>
+    </DockPanel>
 </UserControl>

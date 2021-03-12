@@ -1,4 +1,6 @@
-﻿using System;
+﻿using HLA_Workshop_Assistant.Wpf;
+using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -40,6 +42,21 @@ namespace HLA_Workshop_Assistant
                 this.SetValue(ActiveWorkshopItemsProperty, value);
             }
         }
+        public static readonly DependencyProperty SelectedItemProperty =
+          DependencyProperty.Register(nameof(SelectedItem), typeof(SteamWorkshopItem),
+          typeof(SteamWorkshopItemControl));
+        public SteamWorkshopItem SelectedItem
+        {
+            get
+            {
+                return (SteamWorkshopItem)GetValue(SelectedItemProperty);
+            }
+            set
+            {
+                this.SetValue(SelectedItemProperty, value);
+            }
+        }
+
         public static readonly DependencyProperty GCFScapeConfiguredProperty =
             DependencyProperty.Register(nameof(GCFScapeConfigured), typeof(bool),
             typeof(SteamWorkshopItemControl));
@@ -200,6 +217,125 @@ namespace HLA_Workshop_Assistant
                 win.ShowDialog();
                 data.Note = win.Note;
             }
+        }
+
+        private void OnExport(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog diag = new SaveFileDialog();
+            diag.Filter = "*.csv|*.csv|All Files |*.*";
+            diag.DefaultExt = "csv";
+            diag.OverwritePrompt = true;
+            if (diag.ShowDialog() == true)
+            {
+                Utility.Export(diag.FileName, ActiveWorkshopItems);
+            }
+        }
+
+        private void OnAuthorProfile(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+            if (btn != null)
+            {
+                var item = btn.CommandParameter as SteamWorkshopItem;
+                if (item !=null)
+                {
+                    System.Diagnostics.Process.Start(item.AuthorProfileURL);
+                }
+            }
+        }
+        public void Find()
+        {
+            search = PromptDialog.ShowPrompt("Search", "Enter text to search (no wildcards)");
+            RepeatFind();
+        }
+        public void RepeatFind()
+        {
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                search = search.ToUpperInvariant();
+                bool match = false;
+
+                int startend;
+                if (SelectedItem == null)
+                {
+                    startend = 0;
+                }
+                else
+                {
+                    startend = this.ActiveWorkshopItems.IndexOf(SelectedItem);
+                }
+                for (int i = startend + 1; i < ActiveWorkshopItems.Count; i++)
+                {
+                    var item = ActiveWorkshopItems[i];
+                    match = IsMatch(item, search);
+
+                    if (match)
+                    {
+                        MatchFound(item);
+                        break;
+                    }
+                }
+                if (startend > 0 && !match)
+                {
+                    for (int i = 0; i <= startend; i++)
+                    {
+                        var item = ActiveWorkshopItems[i];
+                        match = IsMatch(item, search);
+                        if (match)
+                        {
+                            MatchFound(item);
+                            break;
+                        }
+                    }
+                }
+
+
+            }
+        }
+        string search = null;
+        private void OnFind(object sender, RoutedEventArgs e)
+        {
+            Find();
+        }
+        void MatchFound(SteamWorkshopItem item)
+        {
+            SelectedItem = item;
+            theListView.ScrollIntoView(SelectedItem);
+        }
+        bool IsMatch(SteamWorkshopItem item, string search)
+        {
+            bool match = false;
+
+            if (!string.IsNullOrEmpty(item.Description))
+            {
+                match = item.Description.ToUpperInvariant().Contains(search);
+            }
+            if (!match && !string.IsNullOrEmpty(item.Author))
+            {
+                match = item.Author.ToUpperInvariant().Contains(search);
+            }
+            if (!match && !string.IsNullOrEmpty(item.Title))
+            {
+                match = item.Title.ToUpperInvariant().Contains(search);
+            }
+            return match;
+        }
+
+        private void OnControlKeyDown(object sender, KeyEventArgs e)
+        {
+            
+            if (e.Key == Key.F && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+            {
+                Find();
+                e.Handled = true;
+            }
+            if (e.Key == Key.F3)
+            {
+                RepeatFind();
+                e.Handled = true;
+            }
+
         }
     }
 }
